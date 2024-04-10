@@ -1,0 +1,19 @@
+.App {
+  text-align: center;
+}
+
+.container {
+  height: 100vh;
+
+  .header {
+    display: flex;
+    align-items: center;
+  }
+
+  .content {
+    padding: 20px 48px;
+    flex-grow: 1;
+  }
+}
+
+
