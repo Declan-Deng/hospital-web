@@ -1,7 +1,10 @@
+import WorkBench from "../Components/personalInformation";
+
+
 const homePage = () => {
     return (
         <div>
-            <h1>homepage</h1>
+            <WorkBench></WorkBench>
         </div>
     );
 }

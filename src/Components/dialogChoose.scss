@@ -1,0 +1,56 @@
+.contact-list {
+  width: 100%;
+  max-width: 300px;
+  background-color: #f1f5f9;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+
+  &.dark {
+    background-color: #1f2937;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #e2e8f0;
+    }
+
+    &.selected {
+      background-color: #bfdbfe;
+    }
+
+    &.dark {
+      &:hover {
+        background-color: #374151;
+      }
+
+      &.selected {
+        background-color: #2563eb;
+      }
+    }
+
+    img {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 9999px;
+      margin-right: 1rem;
+    }
+
+    .contact-name {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #1e293b;
+
+      &.dark {
+        color: #f9fafb;
+      }
+    }
+  }
+}

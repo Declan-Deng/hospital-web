@@ -1,0 +1,133 @@
+.chat-container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    border-radius: 0.75rem;
+    background-color: #e2e8f0;
+    padding: 1rem;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    color: #0f172a;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+    &.dark {
+      background-color: #1e293b;
+      color: #cbd5e1;
+    }
+
+    .message {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+
+      img {
+        margin-right: 0.5rem;
+        height: 2rem;
+        width: 2rem;
+        border-radius: 9999px;
+      }
+
+      .message-content {
+        display: flex;
+        border-radius: 0 0.75rem 0.75rem 0.75rem;
+        background-color: #f8fafc;
+        padding: 1rem;
+
+        &.dark {
+          background-color: #1e293b;
+        }
+      }
+
+      &.user {
+        flex-direction: row-reverse;
+
+        img {
+          margin-left: 0.5rem;
+          margin-right: 0;
+        }
+
+        .message-content {
+          border-radius: 0.75rem 0 0.75rem 0.75rem;
+        }
+      }
+    }
+  }
+
+  .chat-input {
+    margin-top: 0.5rem;
+
+    form {
+      position: relative;
+
+      textarea {
+        display: block;
+        width: 100%;
+        resize: none;
+        border-radius: 0.75rem;
+        border: none;
+        background-color: #e2e8f0;
+        padding: 1rem;
+        padding-left: 2.5rem;
+        padding-right: 5rem;
+        font-size: 0.875rem;
+        color: #0f172a;
+
+        &:focus {
+          outline: none;
+          box-shadow: 0 0 0 2px #2563eb;
+        }
+
+        &.dark {
+          background-color: #1e293b;
+          color: #e2e8f0;
+
+          &::placeholder {
+            color: #94a3b8;
+          }
+
+          &:focus {
+            box-shadow: 0 0 0 2px #2563eb;
+          }
+        }
+      }
+
+      button[type="submit"] {
+        position: absolute;
+        bottom: 0.5rem;
+        right: 0.625rem;
+        border-radius: 0.5rem;
+        background-color: #1d4ed8;
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #e2e8f0;
+
+        &:hover {
+          background-color: #1e40af;
+        }
+
+        &:focus {
+          outline: none;
+          box-shadow: 0 0 0 4px #93c5fd;
+        }
+
+        &.dark {
+          background-color: #2563eb;
+
+          &:hover {
+            background-color: #1d4ed8;
+          }
+
+          &:focus {
+            box-shadow: 0 0 0 4px #93c5fd;
+          }
+        }
+      }
+    }
+  }
+}

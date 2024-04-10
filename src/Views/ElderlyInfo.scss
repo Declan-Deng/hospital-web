@@ -1,0 +1,61 @@
+// ElderlyInfo.scss
+.elderly-info-page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-width: 500px;
+  padding: 20px;
+
+  .search-container {
+    height: 50px;
+  }
+
+  .list-container {
+    flex-grow: 1;
+  }
+
+  .ant-list {
+    overflow: scroll;
+  }
+
+  .search-bar {
+    margin-bottom: 20px;
+    width: 500px;
+  }
+
+  .hover-item {
+    &:hover {
+      background-color: #f9f9f9;
+    }
+  }
+
+
+  .list-item {
+    display: flex;
+    align-items: center;
+
+
+    .elderly-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 18px;
+    }
+
+    .manager-info {
+      display: flex;
+      justify-content: space-between;
+      color: #999;
+    }
+
+    .ant-list-item-meta {
+      flex-grow: 1;
+      margin: 0;
+    }
+
+    .ant-list-item-action {
+      width: 100px;
+      text-align: center;
+      padding-left: 20px;
+    }
+  }
+}

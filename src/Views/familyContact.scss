@@ -1,0 +1,15 @@
+
+.contact {
+  display: flex;
+  height: inherit;
+
+  &-left {
+    height: 100%;
+    width: 300px;
+    margin-right: 20px;
+  }
+  &-main {
+    height: 100%;
+    flex-grow: 1;
+  }
+}

@@ -42,7 +42,7 @@ const App = () => {
                     <Menu
                         theme="dark"
                         mode="horizontal"
-                        defaultSelectedKeys={['2']}
+                        defaultSelectedKeys={['home']}
                         items={items}
                         style={{
                             flex: 1,
@@ -51,14 +51,7 @@ const App = () => {
                     />
                 </Header>
                 <Content className="content">
-                    <div
-                        style={{
-                            background: colorBgContainer,
-                            minHeight: 280,
-                            padding: 24,
-                            borderRadius: borderRadiusLG,
-                        }}
-                    >
+                    <div className="content-inner">
                         <Routes>
                             <Route path="/" element={homePage()} />
                             <Route path="/query" element={infoSearch()} />
