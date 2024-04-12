@@ -1,8 +1,8 @@
 import axios from 'axios';
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const instance = axios.create({
-    baseURL: 'https://xiwaa5634xhr.ngrok.xiaomiqiu123.top',
+    // baseURL: 'https://xiwaa5634xhr.ngrok.xiaomiqiu123.top',
+    baseURL: "http://127.0.0.1:4523/m1/4282322-0-default",
     timeout: 1000
 });
 
@@ -21,13 +21,13 @@ instance.interceptors.response.use(function (config) {
 
 export default async function (url, sign, options) {
     // 如果options中有auth,就在请求头中加入token
-    if (sign.auth) {
-        let token = await AsyncStorage.getItem("userToken");
-        options.headers = {
-            'Authorization': `Bearer ${token}`,
-            ...options.headers
-        };
-    }
+    // if (sign.auth) {
+    //     let token = await AsyncStorage.getItem("userToken");
+    //     options.headers = {
+    //         'Authorization': `Bearer ${token}`,
+    //         ...options.headers
+    //     };
+    // }
 
     // 发送请求
     return instance({ url, ...options}).then(res => {

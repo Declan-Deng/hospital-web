@@ -1,14 +1,10 @@
 .contact-list {
   width: 100%;
-  max-width: 300px;
+  min-width: 200px;
   background-color: #f1f5f9;
   padding: 1rem;
   border-radius: 0.75rem;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-
-  &.dark {
-    background-color: #1f2937;
-  }
 
   .contact-item {
     display: flex;
@@ -26,16 +22,6 @@
       background-color: #bfdbfe;
     }
 
-    &.dark {
-      &:hover {
-        background-color: #374151;
-      }
-
-      &.selected {
-        background-color: #2563eb;
-      }
-    }
-
     img {
       width: 2.5rem;
       height: 2.5rem;
@@ -47,10 +33,6 @@
       font-size: 1rem;
       font-weight: 500;
       color: #1e293b;
-
-      &.dark {
-        color: #f9fafb;
-      }
     }
   }
 }
