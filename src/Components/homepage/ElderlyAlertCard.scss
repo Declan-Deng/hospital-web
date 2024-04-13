@@ -1,0 +1,40 @@
+.elderly-alert-card {
+  width: 350px;
+  margin: 20px;
+
+  &__avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  &__details {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  &__name, &__room {
+    font-weight: bold;
+  }
+
+  &__alert-info {
+    &--current {
+      color: red;
+      font-weight: bold;
+    }
+    &--normal {
+      color: black;
+      font-weight: normal;
+    }
+  }
+}
+
+
+.alertCard {
+  .ant-card-head {
+    background: #FEE2E1 !important;
+  }
+}
+

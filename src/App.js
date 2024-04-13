@@ -29,47 +29,44 @@ const items = [
 
 
 const App = () => {
-    const {
-        token: { colorBgContainer, borderRadiusLG },
-    } = theme.useToken();
-    return (
-        <Router>
-            <Layout className="container">
-                <Header
-                    className="header"
-                >
-                    <div className="demo-logo" />
-                    <Menu
-                        theme="dark"
-                        mode="horizontal"
-                        defaultSelectedKeys={['home']}
-                        items={items}
-                        style={{
-                            flex: 1,
-                            minWidth: 0,
-                        }}
-                    />
-                </Header>
-                <Content className="content">
-                    <div className="content-inner">
-                        <Routes>
-                            <Route path="/" element={homePage()} />
-                            <Route path="/query" element={infoSearch()} />
-                            <Route path="/monitor" element={realtimeDetect()} />
-                            <Route path="/contact" element={familyContact()} />
-                        </Routes>
-                    </div>
-                </Content>
-                <Footer
-                    style={{
-                        textAlign: 'center',
-                    }}
-                >
-                    Group of Barbie ©{new Date().getFullYear()} Created by FrontEnd Team of Barbie
-                </Footer>
-            </Layout>
+        return (
+            <Router>
+                  <Layout className="container">
+                      <Header
+                          className="header"
+                      >
+                          <div className="demo-logo" />
+                          <Menu
+                              theme="dark"
+                              mode="horizontal"
+                              defaultSelectedKeys={['home']}
+                              items={items}
+                              style={{
+                                  flex: 1,
+                                  minWidth: 0,
+                              }}
+                          />
+                      </Header>
+                      <Content className="content">
+                          <div className="content-inner">
+                              <Routes>
+                                  <Route path="/" element={homePage()} />
+                                  <Route path="/query" element={infoSearch()} />
+                                  <Route path="/monitor" element={realtimeDetect()} />
+                                  <Route path="/contact" element={familyContact()} />
+                              </Routes>
+                          </div>
+                      </Content>
+                      <Footer
+                          style={{
+                              textAlign: 'center',
+                          }}
+                      >
+                          Group of Barbie ©{new Date().getFullYear()} Created by FrontEnd Team of Barbie
+                      </Footer>
+                  </Layout>
         </Router>
+        )
 
-    );
 };
 export default App;

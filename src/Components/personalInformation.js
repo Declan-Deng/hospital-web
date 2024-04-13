@@ -7,7 +7,6 @@ const { Text } = Typography;
 const WorkBench = () => {
     const user = {
         name: '张三',
-        avatar: 'https://example.com/avatar.png',
         title: '前端开发工程师',
         lastLoginTime: '2023-04-10 14:30:00',
     };
