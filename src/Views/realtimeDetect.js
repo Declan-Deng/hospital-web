@@ -5,7 +5,15 @@ import { TbDroplets, TbClock } from "react-icons/tb";
 import { RiHeartPulseFill } from "react-icons/ri";
 import { LuBedSingle } from "react-icons/lu";
 import { MdOutlineBloodtype } from "react-icons/md";
-import { InputNumber } from "antd";
+import { InputNumber, Tag } from "antd";
+import {
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  CloseCircleOutlined,
+  ExclamationCircleOutlined,
+  MinusCircleOutlined,
+  SyncOutlined,
+} from "@ant-design/icons";
 
 const mockData = [
   {
@@ -16,35 +24,35 @@ const mockData = [
     bloodOxygen: "98%",
   },
   {
-    id: 1,
+    id: 2,
     bedNumber: "1号床",
     temperature: "36.5度",
     heartRate: "75次",
     bloodOxygen: "98%",
   },
   {
-    id: 1,
+    id: 3,
     bedNumber: "1号床",
     temperature: "36.5度",
     heartRate: "75次",
     bloodOxygen: "98%",
   },
   {
-    id: 1,
+    id: 4,
     bedNumber: "1号床",
     temperature: "36.5度",
     heartRate: "75次",
     bloodOxygen: "98%",
   },
   {
-    id: 1,
+    id: 5,
     bedNumber: "1号床",
     temperature: "36.5度",
     heartRate: "75次",
     bloodOxygen: "98%",
   },
   {
-    id: 1,
+    id: 6,
     bedNumber: "1号床",
     temperature: "36.5度",
     heartRate: "75次",
@@ -85,100 +93,113 @@ const RealtimeDetect = () => {
 
   return (
     <>
-      <h1 className="textBar">室内环境实时显示</h1>
-      <div className="envoBar">
-        <div className="envoDisplayPart">
-          <FaTemperatureFull style={{ fontSize: "50px" }} />
-          <div className="envoText">
-            <p>当前室内温度</p>
-            <p>28 度</p>
-          </div>
+      <div className="background">
+        <h1 className="textBar">
           <div
-            className={`switchButton ${isOn ? "on" : "off"}`}
-            onClick={toggleAC}
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
           >
-            <p>{isOn ? "空调已开启" : "空调已关闭"}</p>
-            <div onClick={handleInputClick}>
-              <InputNumber
-                size="large"
-                min={20}
-                max={30}
-                defaultValue={26}
-                disabled={!isOn}
-              />
+            <p>室内环境实时显示</p>{" "}
+            <p className="time">
+              <TbClock />
+              当前时间：{currentTime}
+            </p>
+          </div>
+        </h1>
+        <div className="envoBar">
+          <div className="envoDisplayPart">
+            <FaTemperatureFull style={{ fontSize: "50px", color: "#8beb68" }} />
+            <div className="envoText">
+              <p>当前室内温度</p>
+
+              <p>28 度</p>
+              <Tag color="success">温度适宜</Tag>
+            </div>
+            <div
+              className={`switchButton ${isOn ? "on" : "off"}`}
+              onClick={toggleAC}
+            >
+              <p>{isOn ? "空调已开启" : "空调已关闭"}</p>
+              <div onClick={handleInputClick}>
+                <InputNumber
+                  size="large"
+                  min={20}
+                  max={30}
+                  defaultValue={26}
+                  disabled={!isOn}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="envoDisplayPart">
+            <TbDroplets style={{ fontSize: "50px", color: "#2992ff" }} />
+            <div className="envoText">
+              <p>当前室内湿度</p>
+              <p>50 %</p>
+              <Tag color="success">湿度适宜</Tag>
+            </div>
+            <div
+              className={`switchButton humidifierButton ${
+                WetisOn ? "on" : "off"
+              }`}
+              onClick={toggleWetAC}
+            >
+              <p>{WetisOn ? "加湿器已开启" : "加湿器已关闭"}</p>
+              <div onClick={handleInputClick}>
+                <InputNumber
+                  size="large"
+                  min={0}
+                  max={100}
+                  step={10}
+                  defaultValue={50}
+                  disabled={!WetisOn}
+                />
+              </div>
             </div>
           </div>
         </div>
-        <div className="envoDisplayPart">
-          <TbDroplets style={{ fontSize: "50px" }} />
-          <div className="envoText">
-            <p>当前室内湿度</p>
-            <p>50 %</p>
-          </div>
-          <div
-            className={`switchButton humidifierButton ${
-              WetisOn ? "on" : "off"
-            }`}
-            onClick={toggleWetAC}
-          >
-            <p>{WetisOn ? "加湿器已开启" : "加湿器已关闭"}</p>
-            <div onClick={handleInputClick}>
-              <InputNumber
-                size="large"
-                min={0}
-                max={100}
-                defaultValue={50}
-                disabled={!WetisOn}
-              />
+        <h1 className="textBar">该房间老人情况实时显示</h1>
+
+        <div className="oldmanArea">
+          {oldMen.map((oldMan) => (
+            <div className="oldmanDisplayPart" key={oldMan.id}>
+              <div className="bedPart">
+                <div>
+                  <LuBedSingle style={{ fontSize: "20px", color: "gray" }} />
+                </div>
+                <p>{oldMan.bedNumber}</p>
+              </div>
+              <div className="oldInfoDisplay">
+                <div className="oldInfoDisplayPart">
+                  <p>体温</p>
+                  <div className="oldInfoDisplayPart-sm">
+                    <FaTemperatureFull color="#c691ad" />
+                    <p style={{ color: "#8e5b77" }}>{oldMan.temperature}</p>
+                  </div>
+                </div>
+
+                <div className="oldInfoDisplayPart">
+                  <p>心率</p>
+                  <div className="oldInfoDisplayPart-sm">
+                    <RiHeartPulseFill color="#fc8379" />
+                    <p style={{ color: "#cf5553" }}>{oldMan.heartRate}</p>
+                  </div>
+                </div>
+
+                <div className="oldInfoDisplayPart">
+                  <p>血氧</p>
+                  <div className="oldInfoDisplayPart-sm">
+                    <MdOutlineBloodtype color="#a6b8e1" />
+                    <p style={{ color: "#5a7297" }}>{oldMan.bloodOxygen}</p>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
-        {/* <div className="envoDisplayPart" style={{ backgroundColor: "#fff7c7" }}>
-          <TbClock style={{ fontSize: "50px" }} />
-          <div className="envoText">
-            <p>当前时间</p>
-            <p>{currentTime}</p>
-          </div>
-        </div> */}
-      </div>
-      <h1 className="textBar">该房间老人情况实时显示</h1>
-
-      <div className="oldmanArea">
-        {oldMen.map((oldMan) => (
-          <div className="oldmanDisplayPart" key={oldMan.id}>
-            <div className="bedPart">
-              <div>
-                <LuBedSingle style={{ fontSize: "20px" }} />
-              </div>
-              <p>{oldMan.bedNumber}</p>
-            </div>
-            <div className="oldInfoDisplay">
-              <div className="oldInfoDisplayPart">
-                <p>体温</p>
-                <div className="oldInfoDisplayPart-sm">
-                  <FaTemperatureFull />
-                  <p>{oldMan.temperature}</p>
-                </div>
-              </div>
-
-              <div className="oldInfoDisplayPart">
-                <p>心率</p>
-                <div className="oldInfoDisplayPart-sm">
-                  <RiHeartPulseFill />
-                  <p>{oldMan.heartRate}</p>
-                </div>
-              </div>
-
-              <div className="oldInfoDisplayPart">
-                <p>血氧</p>
-                <div className="oldInfoDisplayPart-sm">
-                  <MdOutlineBloodtype />
-                  <p>{oldMan.bloodOxygen}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
       </div>
     </>
   );

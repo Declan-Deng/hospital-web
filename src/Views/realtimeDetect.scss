@@ -1,12 +1,34 @@
+.background {
+  background-color: #f5faff;
+  border-radius: 5px;
+}
+
 .textBar {
-  background-color: #0c5bff;
+  background-color: #4475fe;
   width: 100%;
   padding: 5px;
   padding-left: 20px;
+  padding-right: 20px;
   margin: 0;
   border-radius: 5px;
-  font-size: 20px;
+  font-size: 18px;
   color: white;
+
+  p {
+    margin: 0;
+  }
+
+  .time {
+    background-color: #33a4ff;
+    border-radius: 6px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: rgb(253, 245, 189);
+    align-items: center;
+    display: flex;
+    gap: 5px;
+    width: 216px;
+  }
 }
 
 .envoBar {
@@ -18,6 +40,13 @@
 .envoText {
   :first-child {
     color: #6b6f6f;
+  }
+  p:nth-child(2) {
+    font-size: 24px;
+  }
+
+  :nth-child(3) {
+    margin-left: 10px;
   }
 }
 
@@ -43,12 +72,13 @@
     transition: all 0.3s ease-in-out;
 
     p {
-      color: #fff;
+      margin: 5px;
     }
 
     &:hover {
       transform: scale(1.05);
       transition: all 0.3s ease-in-out;
+      filter: brightness(105%);
     }
 
     &.on {
@@ -59,18 +89,18 @@
     }
 
     &.off {
-      background-color: #ccc; // Gray background when AC is off
+      background-color: #dbdbdb; // Gray background when AC is off
       p {
-        color: #333; // Optional: Change text color when AC is off for better visibility
+        color: #5e5e5e; // Optional: Change text color when AC is off for better visibility
       }
     }
 
     &.humidifierButton {
       &.on {
-        background-color: #32a2fc;
+        background-color: #33a7ff;
 
         p {
-          color: blue;
+          color: #00f;
         }
       }
     }
@@ -89,7 +119,7 @@
   padding: 10px;
   justify-content: flex-start; // 或 space-between，取决于你想如何布局每个项
   gap: 10px; // 如果你想要一些间隔
-  height: 410px; // 这是一个示例高度，根据你的实际需求调整
+  height: 420px; // 这是一个示例高度，根据你的实际需求调整
   overflow-y: auto; // 当内容超出高度时，允许垂直滚动
   // padding: 10px; // 可选，为了更好的视觉效果
 
@@ -102,7 +132,7 @@
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
-    background-color: #fff; // 背景色
+    background-color: #ffffffe2; // 背景色
 
     .bedPart {
       display: flex;
@@ -144,12 +174,13 @@
           justify-content: space-evenly;
 
           :first-child {
-            font-size: 30px;
+            font-size: 25px;
           }
 
           p {
             font-weight: 600;
-            font-size: 20px;
+            font-size: 22px;
+            margin-bottom: 5px;
           }
         }
       }
