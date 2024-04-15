@@ -6,6 +6,7 @@ import homePage from "./Views/homePage";
 import infoSearch from "./Views/infoSearch";
 import realtimeDetect from "./Views/realtimeDetect";
 import familyContact from "./Views/familyContact";
+import ElderlyDetail from './Views/ElderlyDetail';
 
 const { Header, Content, Footer } = Layout;
 const items = [
@@ -54,6 +55,7 @@ const App = () => {
                                   <Route path="/query" element={infoSearch()} />
                                   <Route path="/monitor" element={realtimeDetect()} />
                                   <Route path="/contact" element={familyContact()} />
+                                  <Route path="/elderly/:id" element={<ElderlyDetail />} />
                               </Routes>
                           </div>
                       </Content>
