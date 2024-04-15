@@ -1,0 +1,57 @@
+.App {
+  text-align: center;
+}
+
+.ant-layout {
+  min-width: 650px;
+}
+
+.container {
+  height: 100vh;
+
+  .logoImage {
+    height: 50px;
+    width: 50px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    padding: 3px;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+
+    .ant-menu.MenuBar .ant-menu-item {
+      padding-left: 70px;
+      padding-right: 70px;
+    }
+
+    .MenuBar {
+      flex: 1;
+      min-width: 0;
+      justify-content: flex-end;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      font-size: 16px;
+    }
+  }
+
+  .content {
+    padding: 20px 30px;
+    flex-grow: 1;
+    &-inner {
+      height: 100%;
+      background: white;
+      min-height: 280px;
+      padding: 24px;
+      border-radius: 10px;
+      overflow: scroll;
+    }
+  }
+}
+
+.footer {
+  text-align: center;
+
+  margin: 0;
+}

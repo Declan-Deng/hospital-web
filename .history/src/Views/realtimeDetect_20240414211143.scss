@@ -1,0 +1,183 @@
+.container {
+  padding: 0;
+}
+
+.background {
+  background-color: #cae5fb;
+}
+
+.textBar {
+  background-color: #4475fe;
+  width: 100%;
+  padding: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin: 0;
+  border-radius: 5px;
+  font-size: 18px;
+  color: white;
+
+  p {
+    margin: 0;
+  }
+
+  .time {
+    background-color: #33a4ff;
+    border-radius: 6px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+.envoBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.envoText {
+  :first-child {
+    color: #6b6f6f;
+  }
+  p:nth-child(2) {
+    font-size: 24px;
+  }
+}
+
+.envoDisplayPart {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  background-color: #f9f9f9;
+  padding: 10px 25px;
+  border-radius: 10px;
+  margin: 10px;
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
+
+  .switchButton {
+    background-color: #0c5bff;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 10px;
+    transition: all 0.3s ease-in-out;
+
+    p {
+      margin: 5px;
+    }
+
+    &:hover {
+      transform: scale(1.05);
+      transition: all 0.3s ease-in-out;
+      filter: brightness(105%);
+    }
+
+    &.on {
+      background-color: #94fb80; // Green background when AC is on
+      p {
+        color: green; // Optional: Change text color when AC is on for better visibility
+      }
+    }
+
+    &.off {
+      background-color: #dbdbdb; // Gray background when AC is off
+      p {
+        color: #5e5e5e; // Optional: Change text color when AC is off for better visibility
+      }
+    }
+
+    &.humidifierButton {
+      &.on {
+        background-color: #32a2fc;
+
+        p {
+          color: blue;
+        }
+      }
+    }
+  }
+
+  p {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px;
+  }
+}
+
+.oldmanArea {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  justify-content: flex-start; // 或 space-between，取决于你想如何布局每个项
+  gap: 10px; // 如果你想要一些间隔
+  height: 410px; // 这是一个示例高度，根据你的实际需求调整
+  overflow-y: auto; // 当内容超出高度时，允许垂直滚动
+  // padding: 10px; // 可选，为了更好的视觉效果
+
+  .oldmanDisplayPart {
+    width: calc(33.3% - 10px); // 每个部分占行宽的三分之一，减去间隔
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #ffffffe2; // 背景色
+
+    .bedPart {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 5px;
+
+      p {
+        font-size: 20px;
+        font-weight: bold;
+        margin: 0px;
+      }
+    }
+
+    .oldInfoDisplay {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      background-color: #f9f9f9;
+      border-radius: 6px;
+      gap: 20px;
+      padding: 10px 20px;
+      box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+
+      .oldInfoDisplayPart {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        :first-child {
+          font-weight: 600;
+        }
+
+        .oldInfoDisplayPart-sm {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-evenly;
+
+          :first-child {
+            font-size: 25px;
+          }
+
+          p {
+            font-weight: 600;
+            font-size: 22px;
+            margin-bottom: 5px;
+          }
+        }
+      }
+    }
+  }
+}

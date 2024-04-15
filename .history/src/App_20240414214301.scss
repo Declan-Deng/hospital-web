@@ -1,0 +1,36 @@
+.App {
+  text-align: center;
+}
+
+.ant-layout {
+  min-width: 650px;
+}
+
+.container {
+  height: 100vh;
+
+  .logoImage {
+    height: 50px;
+    width: 50px;
+    background-color: rgb(238, 238, 238);
+    border-radius: 20px;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+  }
+
+  .content {
+    padding: 20px 30px;
+    flex-grow: 1;
+    &-inner {
+      height: 100%;
+      background: white;
+      min-height: 280px;
+      padding: 24px;
+      border-radius: 10px;
+      overflow: scroll;
+    }
+  }
+}
