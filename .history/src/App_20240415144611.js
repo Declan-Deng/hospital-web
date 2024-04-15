@@ -6,7 +6,6 @@ import {
   Link,
   Navigate,
   Outlet,
-  useNavigate,
 } from "react-router-dom";
 import { Layout, Menu } from "antd";
 import "./App.scss";
@@ -61,22 +60,10 @@ const App = () => {
 };
 
 const DefaultContainer = () => {
-  const navigate = useNavigate();
-
-  // 创建一个事件处理函数，用于在图片被点击时导航到登录页面
-  const handleLogoClick = () => {
-    navigate("/login");
-  };
-
   return (
     <Layout className="container">
       <Header className="header">
-        <img
-          src={logoImage}
-          className="logoImage"
-          onClick={handleLogoClick}
-          alt="logo"
-        />
+        <img src={logoImage} className="logoImage" />
         <Menu
           theme="dark"
           mode="horizontal"

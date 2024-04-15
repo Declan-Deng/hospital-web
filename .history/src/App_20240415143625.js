@@ -5,16 +5,14 @@ import {
   Route,
   Link,
   Navigate,
-  Outlet,
-  useNavigate,
 } from "react-router-dom";
 import { Layout, Menu } from "antd";
 import "./App.scss";
 import LoginPage from "./Views/LoginPage";
-import HomePage from "./Views/homePage";
-import InfoSearch from "./Views/infoSearch";
-import RealtimeDetect from "./Views/realtimeDetect";
-import FamilyContact from "./Views/familyContact";
+import HomePage from "./Views/HomePage";
+import InfoSearch from "./Views/InfoSearch";
+import RealtimeDetect from "./Views/RealtimeDetect";
+import FamilyContact from "./Views/FamilyContact";
 import ElderlyDetail from "./Views/ElderlyDetail";
 import logoImage from "./assets/big__1_-removebg.png";
 
@@ -61,22 +59,10 @@ const App = () => {
 };
 
 const DefaultContainer = () => {
-  const navigate = useNavigate();
-
-  // 创建一个事件处理函数，用于在图片被点击时导航到登录页面
-  const handleLogoClick = () => {
-    navigate("/login");
-  };
-
   return (
     <Layout className="container">
       <Header className="header">
-        <img
-          src={logoImage}
-          className="logoImage"
-          onClick={handleLogoClick}
-          alt="logo"
-        />
+        <img src={logoImage} className="logoImage" />
         <Menu
           theme="dark"
           mode="horizontal"

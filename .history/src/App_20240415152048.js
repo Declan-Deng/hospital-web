@@ -71,12 +71,7 @@ const DefaultContainer = () => {
   return (
     <Layout className="container">
       <Header className="header">
-        <img
-          src={logoImage}
-          className="logoImage"
-          onClick={handleLogoClick}
-          alt="logo"
-        />
+        <img src={logoImage} className="logoImage" />
         <Menu
           theme="dark"
           mode="horizontal"

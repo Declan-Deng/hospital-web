@@ -11,7 +11,6 @@ import imageSrc from "../assets/big__1_-removebg.png";
 import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
-  const navigate = useNavigate();
   // 使用useState追踪用户名、密码和记住密码复选框的状态
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -28,31 +27,8 @@ const LoginPage = () => {
     }
   }, []);
 
-  // const handleLogin = () => {
-  //   // 使用正则表达式来检查密码是否为6-16位字母和数字的组合
-  //   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$/;
-  //   if (!passwordRegex.test(password)) {
-  //     notification.error({
-  //       message: "登录失败",
-  //       description: "密码必须是6-16位字母和数字的组合。",
-  //       duration: 2.5,
-  //     });
-  //     return; // 如果密码格式不正确，提前退出函数
-  //   }
-
-  //   console.log(username, password);
-  //   navigate("/home");
-
-  //   if (rememberMe) {
-  //     localStorage.setItem("username", username);
-  //     localStorage.setItem("password", password);
-  //   } else {
-  //     localStorage.removeItem("username");
-  //     localStorage.removeItem("password");
-  //   }
-  // };
-
-  const handleLogin = async () => {
+  const handleLogin = () => {
+    // 使用正则表达式来检查密码是否为6-16位字母和数字的组合
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$/;
     if (!passwordRegex.test(password)) {
       notification.error({
@@ -63,49 +39,15 @@ const LoginPage = () => {
       return; // 如果密码格式不正确，提前退出函数
     }
 
-    // 准备请求参数
-    const loginDetails = {
-      userName: username,
-      password: password,
-    };
+    console.log(username, password);
+    navigate("/home");
 
-    // 发起登录请求
-    try {
-      const response = await fetch(
-        "http://h1cy9348skpi.ngrok.xiaomiqiu123.top/MedicalStaff/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(loginDetails),
-        }
-      );
-
-      const data = await response.json(); // 解析JSON数据
-
-      if (response.ok) {
-        console.log(data); // 日志记录，实际应用中可移除
-        localStorage.setItem("userId", data.id); // 保存用户ID
-
-        if (rememberMe) {
-          localStorage.setItem("username", username);
-          localStorage.setItem("password", password);
-        } else {
-          localStorage.removeItem("username");
-          localStorage.removeItem("password");
-        }
-
-        navigate("/home"); // 登录成功后导航到主页
-      } else {
-        throw new Error(data.message || "登录失败");
-      }
-    } catch (error) {
-      notification.error({
-        message: "登录错误",
-        description: error.message,
-        duration: 2.5,
-      });
+    if (rememberMe) {
+      localStorage.setItem("username", username);
+      localStorage.setItem("password", password);
+    } else {
+      localStorage.removeItem("username");
+      localStorage.removeItem("password");
     }
   };
 
