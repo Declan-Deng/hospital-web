@@ -86,8 +86,7 @@ const LoginPage = () => {
 
       if (response.ok) {
         console.log(data); // 日志记录，实际应用中可移除
-        localStorage.setItem("userId", data.data.id); // 保存用户ID
-        console.log(data.data.id);
+        localStorage.setItem("userId", data.id); // 保存用户ID
 
         if (rememberMe) {
           localStorage.setItem("username", username);

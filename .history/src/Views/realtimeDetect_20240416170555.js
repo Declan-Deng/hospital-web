@@ -148,7 +148,10 @@ const RealtimeDetect = () => {
   };
 
   useEffect(() => {
+    // 从 localStorage 获取 staffId 并确保它是字符串
     let staffId = localStorage.getItem("userId");
+
+    // 检查 staffId 是否存在并转换为字符串
     if (!staffId) {
       notification.error({
         message: "错误",
@@ -158,37 +161,37 @@ const RealtimeDetect = () => {
       return;
     }
 
-    const fetchRoomEnvironment = () => {
-      const url = `https://n58mgwvs5a83.hk1.xiaomiqiu123.top/RoomData/getRoomEnvironment/${staffId}`;
-      fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ staffId: staffId }),
+    staffId = staffId.toString();
+
+    console.log("Converted staffId to string:", staffId);
+
+    // 构造请求URL
+    const url = `https://n58mgwvs5a83.hk1.xiaomiqiu123.top/RoomData/getRoomEnvironment/${staffId}`;
+
+    // 发送 POST 请求
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ staffId: staffId }), // 确保发送的数据体中 staffId 是字符串
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.code === 200) {
+          setTemperature(data.data.temperature.toFixed(2));
+          setHumidity(data.data.humidity.toFixed(2));
+        } else {
+          throw new Error(data.message || "获取数据失败");
+        }
       })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.code === 200) {
-            setTemperature(data.data.temperature.toFixed(2));
-            setHumidity(data.data.humidity.toFixed(2));
-          } else {
-            throw new Error(data.message || "获取数据失败");
-          }
-        })
-        .catch((error) => {
-          notification.error({
-            message: "请求错误",
-            description: error.message || "网络错误",
-            duration: 2.5,
-          });
+      .catch((error) => {
+        notification.error({
+          message: "请求错误",
+          description: error.message || "网络错误",
+          duration: 2.5,
         });
-    };
-
-    fetchRoomEnvironment(); // Initial call
-    const intervalId = setInterval(fetchRoomEnvironment, 5000); // Set interval
-
-    return () => clearInterval(intervalId); // Clean up
+      });
   }, []);
 
   useEffect(() => {
@@ -236,61 +239,45 @@ const RealtimeDetect = () => {
   }, []);
 
   useEffect(() => {
-    const staffId = localStorage.getItem("userId");
-    if (!staffId) {
-      notification.error({
-        message: "错误",
-        description: "未找到员工ID",
-        duration: 2.5,
-      });
-      return;
-    }
+    if (residentsInfo.length > 0) {
+      // 创建一个对象来存储每个老人的健康数据
+      let healthData = {};
 
-    const fetchAllResidentsHealthData = () => {
-      // 确保仅在有居住者信息时才进行数据请求
-      if (residentsInfo.length > 0) {
-        // 创建一个对象来存储每个老人的健康数据
-        let healthData = {};
+      // 对每个老人发起健康数据的请求
+      residentsInfo.forEach((resident) => {
+        const url = `https://n58mgwvs5a83.hk1.xiaomiqiu123.top/RoomData/getResidentHealthData/${resident.residentId}`;
 
-        residentsInfo.forEach((resident) => {
-          const url = `https://n58mgwvs5a83.hk1.xiaomiqiu123.top/RoomData/getResidentHealthData/${resident.residentId}`;
-          fetch(url, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ residentId: resident.residentId }),
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              if (data.code === 200) {
-                // 在 healthData 对象中添加该老人的健康数据
-                healthData[resident.residentId] = data.data;
-                // 如果这是最后一个老人的数据，更新状态
-                if (Object.keys(healthData).length === residentsInfo.length) {
-                  setResidentsHealthData(healthData);
-                }
-              } else {
-                throw new Error(data.message || "获取健康数据失败");
+        fetch(url, {
+          method: "POST", // 或者 "GET"，根据后端要求
+          headers: {
+            "Content-Type": "application/json",
+          },
+          // 如果需要在请求体发送数据
+          body: JSON.stringify({ residentId: resident.residentId }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.code === 200) {
+              // 在 healthData 对象中添加该老人的健康数据
+              healthData[resident.residentId] = data.data;
+              // 如果这是最后一个老人的数据，更新状态
+              if (Object.keys(healthData).length === residentsInfo.length) {
+                setResidentsHealthData(healthData);
               }
-            })
-            .catch((error) => {
-              notification.error({
-                message: "请求错误",
-                description: error.message || "网络错误",
-                duration: 2.5,
-              });
+            } else {
+              throw new Error(data.message || "获取健康数据失败");
+            }
+          })
+          .catch((error) => {
+            notification.error({
+              message: "请求错误",
+              description: error.message || "网络错误",
+              duration: 2.5,
             });
-        });
-      }
-    };
-
-    // 初始获取数据并设置定时器
-    fetchAllResidentsHealthData();
-    const intervalId = setInterval(fetchAllResidentsHealthData, 5000); // Set interval
-
-    return () => clearInterval(intervalId); // Clean up
-  }, [residentsInfo]); // 依赖 residentsInfo，确保有更新时可以重启定时器
+          });
+      });
+    }
+  }, [residentsInfo]);
 
   useEffect(() => {
     let tempTag = "";
@@ -329,6 +316,14 @@ const RealtimeDetect = () => {
 
     return () => clearInterval(timer); // 清除定时器
   }, []);
+
+  // const toggleAC = () => {
+  //   setIsOn(!isOn);
+  // };
+
+  // const toggleWetAC = () => {
+  //   setWetIsOn(!WetisOn);
+  // };
 
   const handleInputClick = (event) => {
     event.stopPropagation();
@@ -395,6 +390,16 @@ const RealtimeDetect = () => {
               onClick={toggleWetAC}
             >
               <p>{WetisOn ? "加湿器已开启" : "加湿器已关闭"}</p>
+              {/* <div onClick={handleInputClick}>
+                <InputNumber
+                  size="large"
+                  min={0}
+                  max={100}
+                  step={10}
+                  defaultValue={50}
+                  disabled={!WetisOn}
+                />
+              </div> */}
             </div>
           </div>
         </div>

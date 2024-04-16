@@ -15,6 +15,52 @@ import {
   SyncOutlined,
 } from "@ant-design/icons";
 
+// const mockData = [
+//   {
+//     id: 1,
+//     Name: "老人",
+//     temperature: "36.5度",
+//     heartRate: "75次",
+//     bloodOxygen: "98%",
+//   },
+//   {
+//     id: 2,
+//     Name: "老人",
+//     temperature: "36.5度",
+//     heartRate: "75次",
+//     bloodOxygen: "98%",
+//   },
+//   {
+//     id: 3,
+//     Name: "老人",
+//     temperature: "36.5度",
+//     heartRate: "75次",
+//     bloodOxygen: "98%",
+//   },
+//   {
+//     id: 4,
+//     Name: "老人",
+//     temperature: "36.5度",
+//     heartRate: "75次",
+//     bloodOxygen: "98%",
+//   },
+//   {
+//     id: 5,
+//     Name: "老人",
+//     temperature: "36.5度",
+//     heartRate: "75次",
+//     bloodOxygen: "98%",
+//   },
+//   {
+//     id: 6,
+//     Name: "老人",
+//     temperature: "36.5度",
+//     heartRate: "75次",
+//     bloodOxygen: "98%",
+//   },
+//   // 添加更多老人的信息...
+// ];
+
 const RealtimeDetect = () => {
   // const [oldMen, setOldMen] = useState([]);
   const [isOn, setIsOn] = useState(false);
@@ -24,75 +70,15 @@ const RealtimeDetect = () => {
   const [humidityTag, setHumidityTag] = useState("");
   const [temperature, setTemperature] = useState("28");
   const [humidity, setHumidity] = useState("50");
-  const [residentsHealthData, setResidentsHealthData] = useState({});
   const [currentTime, setCurrentTime] = useState(
     new Date().toLocaleTimeString()
   );
-
-  const toggleWetAC = () => {
-    // 根据当前状态决定是打开还是关闭加湿器
-    if (WetisOn) {
-      handleHumidifierOff();
-    } else {
-      handleHumidifierOn();
-    }
-  };
-
-  const handleHumidifierOn = async () => {
-    try {
-      const response = await fetch(
-        "https://n58mgwvs5a83.hk1.xiaomiqiu123.top/RoomData/HumidifierON",
-        { method: "GET" }
-      );
-      const data = await response.json();
-      if (data.code === 200) {
-        notification.success({
-          message: "加湿器已开启",
-          duration: 2.5,
-        });
-        setWetIsOn(true); // 更新状态以反映加湿器已开启
-      } else {
-        throw new Error(data.message || "无法开启加湿器");
-      }
-    } catch (error) {
-      notification.error({
-        message: "请求错误",
-        description: error.message || "网络错误",
-        duration: 2.5,
-      });
-    }
-  };
-
-  const handleHumidifierOff = async () => {
-    try {
-      const response = await fetch(
-        "https://n58mgwvs5a83.hk1.xiaomiqiu123.top/RoomData/HumidifierOFF",
-        { method: "GET" }
-      );
-      const data = await response.json();
-      if (data.code === 200) {
-        notification.success({
-          message: "加湿器已关闭",
-          duration: 2.5,
-        });
-        setWetIsOn(false); // 更新状态以反映加湿器已关闭
-      } else {
-        throw new Error(data.message || "无法关闭加湿器");
-      }
-    } catch (error) {
-      notification.error({
-        message: "请求错误",
-        description: error.message || "网络错误",
-        duration: 2.5,
-      });
-    }
-  };
 
   const handleTemperatureChange = (value) => {
     const temperatureChangeUrl = `https://n58mgwvs5a83.hk1.xiaomiqiu123.top/RoomData/TemperatureChange/${value}`;
 
     fetch(temperatureChangeUrl, {
-      method: "GET",
+      method: "POST", // 根据后端要求可能需要修改为 GET 或其他方法
     })
       .then((response) => response.json())
       .then((data) => {
@@ -114,41 +100,11 @@ const RealtimeDetect = () => {
       });
   };
 
-  const toggleAC = () => {
-    setIsOn(!isOn);
-
-    const acStateUrl = isOn
-      ? "https://n58mgwvs5a83.hk1.xiaomiqiu123.top/RoomData/SwitchAirConditionerOFF"
-      : "https://n58mgwvs5a83.hk1.xiaomiqiu123.top/RoomData/SwitchAirConditionerON";
-
-    // 发送请求来切换空调状态
-    fetch(acStateUrl, {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.code === 200) {
-          notification.success({
-            message: `空调已${isOn ? "关闭" : "打开"}`,
-            duration: 2.5,
-          });
-        } else {
-          throw new Error("切换空调状态失败");
-        }
-      })
-      .catch((error) => {
-        notification.error({
-          message: "请求错误",
-          description: error.message || "网络错误",
-          duration: 2.5,
-        });
-        // 如果请求失败，恢复切换前的状态
-        setIsOn(isOn);
-      });
-  };
-
   useEffect(() => {
+    // 从 localStorage 获取 staffId 并确保它是字符串
     let staffId = localStorage.getItem("userId");
+
+    // 检查 staffId 是否存在并转换为字符串
     if (!staffId) {
       notification.error({
         message: "错误",
@@ -158,37 +114,38 @@ const RealtimeDetect = () => {
       return;
     }
 
-    const fetchRoomEnvironment = () => {
-      const url = `https://n58mgwvs5a83.hk1.xiaomiqiu123.top/RoomData/getRoomEnvironment/${staffId}`;
-      fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ staffId: staffId }),
+    // 转换为字符串，如果它原本是数字的话
+    staffId = staffId.toString();
+
+    console.log("Converted staffId to string:", staffId);
+
+    // 构造请求URL
+    const url = `https://n58mgwvs5a83.hk1.xiaomiqiu123.top/RoomData/getRoomEnvironment/${staffId}`;
+
+    // 发送 POST 请求
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ staffId: staffId }), // 确保发送的数据体中 staffId 是字符串
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.code === 200) {
+          setTemperature(data.data.temperature.toFixed(2));
+          setHumidity(data.data.humidity.toFixed(2));
+        } else {
+          throw new Error(data.message || "获取数据失败");
+        }
       })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.code === 200) {
-            setTemperature(data.data.temperature.toFixed(2));
-            setHumidity(data.data.humidity.toFixed(2));
-          } else {
-            throw new Error(data.message || "获取数据失败");
-          }
-        })
-        .catch((error) => {
-          notification.error({
-            message: "请求错误",
-            description: error.message || "网络错误",
-            duration: 2.5,
-          });
+      .catch((error) => {
+        notification.error({
+          message: "请求错误",
+          description: error.message || "网络错误",
+          duration: 2.5,
         });
-    };
-
-    fetchRoomEnvironment(); // Initial call
-    const intervalId = setInterval(fetchRoomEnvironment, 5000); // Set interval
-
-    return () => clearInterval(intervalId); // Clean up
+      });
   }, []);
 
   useEffect(() => {
@@ -236,63 +193,6 @@ const RealtimeDetect = () => {
   }, []);
 
   useEffect(() => {
-    const staffId = localStorage.getItem("userId");
-    if (!staffId) {
-      notification.error({
-        message: "错误",
-        description: "未找到员工ID",
-        duration: 2.5,
-      });
-      return;
-    }
-
-    const fetchAllResidentsHealthData = () => {
-      // 确保仅在有居住者信息时才进行数据请求
-      if (residentsInfo.length > 0) {
-        // 创建一个对象来存储每个老人的健康数据
-        let healthData = {};
-
-        residentsInfo.forEach((resident) => {
-          const url = `https://n58mgwvs5a83.hk1.xiaomiqiu123.top/RoomData/getResidentHealthData/${resident.residentId}`;
-          fetch(url, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ residentId: resident.residentId }),
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              if (data.code === 200) {
-                // 在 healthData 对象中添加该老人的健康数据
-                healthData[resident.residentId] = data.data;
-                // 如果这是最后一个老人的数据，更新状态
-                if (Object.keys(healthData).length === residentsInfo.length) {
-                  setResidentsHealthData(healthData);
-                }
-              } else {
-                throw new Error(data.message || "获取健康数据失败");
-              }
-            })
-            .catch((error) => {
-              notification.error({
-                message: "请求错误",
-                description: error.message || "网络错误",
-                duration: 2.5,
-              });
-            });
-        });
-      }
-    };
-
-    // 初始获取数据并设置定时器
-    fetchAllResidentsHealthData();
-    const intervalId = setInterval(fetchAllResidentsHealthData, 5000); // Set interval
-
-    return () => clearInterval(intervalId); // Clean up
-  }, [residentsInfo]); // 依赖 residentsInfo，确保有更新时可以重启定时器
-
-  useEffect(() => {
     let tempTag = "";
     let humTag = "";
 
@@ -329,6 +229,14 @@ const RealtimeDetect = () => {
 
     return () => clearInterval(timer); // 清除定时器
   }, []);
+
+  const toggleAC = () => {
+    setIsOn(!isOn);
+  };
+
+  const toggleWetAC = () => {
+    setWetIsOn(!WetisOn);
+  };
 
   const handleInputClick = (event) => {
     event.stopPropagation();
@@ -395,6 +303,16 @@ const RealtimeDetect = () => {
               onClick={toggleWetAC}
             >
               <p>{WetisOn ? "加湿器已开启" : "加湿器已关闭"}</p>
+              <div onClick={handleInputClick}>
+                <InputNumber
+                  size="large"
+                  min={0}
+                  max={100}
+                  step={10}
+                  defaultValue={50}
+                  disabled={!WetisOn}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -414,9 +332,7 @@ const RealtimeDetect = () => {
                   <p>体温</p>
                   <div className="oldInfoDisplayPart-sm">
                     <FaTemperatureFull color="#c691ad" />
-                    <p style={{ color: "#8e5b77" }}>
-                      {residentsHealthData[resident.residentId]?.temperature}°C
-                    </p>
+                    <p style={{ color: "#8e5b77" }}>1</p>
                   </div>
                 </div>
 
@@ -424,9 +340,7 @@ const RealtimeDetect = () => {
                   <p>心率</p>
                   <div className="oldInfoDisplayPart-sm">
                     <RiHeartPulseFill color="#fc8379" />
-                    <p style={{ color: "#cf5553" }}>
-                      {residentsHealthData[resident.residentId]?.heartRate}次
-                    </p>
+                    <p style={{ color: "#cf5553" }}>2</p>
                   </div>
                 </div>
 
@@ -434,9 +348,7 @@ const RealtimeDetect = () => {
                   <p>血氧</p>
                   <div className="oldInfoDisplayPart-sm">
                     <MdOutlineBloodtype color="#a6b8e1" />
-                    <p style={{ color: "#5a7297" }}>
-                      {residentsHealthData[resident.residentId]?.oxygenLevel}%
-                    </p>
+                    <p style={{ color: "#5a7297" }}>3</p>
                   </div>
                 </div>
               </div>
