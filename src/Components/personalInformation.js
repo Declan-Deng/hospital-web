@@ -6,9 +6,9 @@ const { Text } = Typography;
 
 const WorkBench = () => {
     const user = {
-        name: '张三',
-        title: '前端开发工程师',
-        lastLoginTime: '2023-04-10 14:30:00',
+        name: 'XXX',
+        title: '一级护理师',
+        lastLoginTime: '2023-04-16 14:30:00',
     };
 
     const handleSwitchAccount = () => {
@@ -17,6 +17,8 @@ const WorkBench = () => {
 
     const handleLogout = () => {
         // 退出登录的逻辑
+        localStorage.removeItem('userId');
+        console.log('logged out');
     };
 
     return (
@@ -29,12 +31,12 @@ const WorkBench = () => {
                 <Text type="secondary">
                     最近登录时间:{user.lastLoginTime}
                 </Text>
-                <Text type="secondary">职称:{user.title}</Text>
+                <Text type="secondary">职位:{user.title}</Text>
             </div>
             <div className="workbench-right">
-                <Button type="link" onClick={handleSwitchAccount}>
-                    切换账号
-                </Button>
+                {/*<Button type="link" onClick={handleSwitchAccount}>*/}
+                {/*    切换账号*/}
+                {/*</Button>*/}
                 <Button type="link" onClick={handleLogout}>
                     退出登录
                 </Button>
