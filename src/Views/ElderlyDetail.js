@@ -84,7 +84,7 @@ const ElderlyDetail = () => {
   });
 
   return (
-      <div style={{ width: "800px" }}>
+      <div>
         <Card title={`基本信息 - ${elderlyInfo.fullName}`} >
           <Row gutter={16}>
             <Col span={3}>
