@@ -17,43 +17,35 @@ const ChatPage = () => {
 
     ws.onmessage = (event) => {
       console.log("Received raw data:", event.data);
+
+      let messageData;
       try {
-        if (
-          event.data &&
-          typeof event.data === "string" &&
-          event.data.startsWith("{") &&
-          event.data.endsWith("}")
-        ) {
-          const message = JSON.parse(event.data);
-          setMessages((prevMessages) => [
-            ...prevMessages,
-            {
-              id: prevMessages.length + 1,
-              user: message.userName || "User",
-              avatar:
-                message.avatar ||
-                "https://dummyimage.com/128x128/000000/ffffff&text=U",
-              content: message.message,
-            },
-          ]);
-          console.log("Processed message:", message);
-        } else {
-          // Handle non-JSON data
-          console.log("Received non-JSON data:", event.data);
-          setMessages((prevMessages) => [
-            ...prevMessages,
-            {
-              id: prevMessages.length + 1,
-              user: "Unknown",
-              avatar: "https://dummyimage.com/128x128/000000/ffffff&text=U",
-              content: event.data,
-            },
-          ]);
-        }
+        // 尝试解析JSON，看是否为JSON数据
+        messageData = JSON.parse(event.data);
       } catch (error) {
+        // 如果解析失败，说明不是JSON，手动创建消息对象
         console.error("Error parsing JSON: ", error);
-        console.error("Received data: ", event.data);
+        messageData = {
+          userName: "Unknown", // 或者其他默认用户名
+          avatar: "https://dummyimage.com/128x128/000000/ffffff&text=U", // 默认头像
+          message: event.data, // 直接使用接收到的文本作为消息内容
+        };
       }
+
+      // 更新消息列表
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          id: prevMessages.length + 1, // 生成新的ID
+          user: messageData.userName || "User",
+          avatar:
+            messageData.avatar ||
+            "https://dummyimage.com/128x128/000000/ffffff&text=U",
+          content: messageData.message,
+        },
+      ]);
+
+      console.log("Processed message:", messageData);
     };
 
     ws.onerror = (error) => {

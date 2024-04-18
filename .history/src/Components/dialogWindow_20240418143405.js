@@ -2,7 +2,20 @@ import React, { useState, useEffect } from "react";
 import "./dialogWindow.scss";
 
 const ChatPage = () => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    // {
+    //   id: 1,
+    //   user: "John",
+    //   avatar: "https://dummyimage.com/128x128/363536/ffffff&text=J",
+    //   content: "你好老人家属(自动问候)",
+    // },
+    // {
+    //   id: 2,
+    //   user: "Assistant",
+    //   avatar: "https://dummyimage.com/128x128/354ea1/ffffff&text=G",
+    //   content: "你好(自动问候)",
+    // },
+  ]);
   const [inputValue, setInputValue] = useState("");
   const [socket, setSocket] = useState(null);
 

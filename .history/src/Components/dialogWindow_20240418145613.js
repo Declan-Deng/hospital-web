@@ -15,47 +15,6 @@ const ChatPage = () => {
       console.log("Connected to WebSocket");
     };
 
-    ws.onmessage = (event) => {
-      console.log("Received raw data:", event.data);
-      try {
-        if (
-          event.data &&
-          typeof event.data === "string" &&
-          event.data.startsWith("{") &&
-          event.data.endsWith("}")
-        ) {
-          const message = JSON.parse(event.data);
-          setMessages((prevMessages) => [
-            ...prevMessages,
-            {
-              id: prevMessages.length + 1,
-              user: message.userName || "User",
-              avatar:
-                message.avatar ||
-                "https://dummyimage.com/128x128/000000/ffffff&text=U",
-              content: message.message,
-            },
-          ]);
-          console.log("Processed message:", message);
-        } else {
-          // Handle non-JSON data
-          console.log("Received non-JSON data:", event.data);
-          setMessages((prevMessages) => [
-            ...prevMessages,
-            {
-              id: prevMessages.length + 1,
-              user: "Unknown",
-              avatar: "https://dummyimage.com/128x128/000000/ffffff&text=U",
-              content: event.data,
-            },
-          ]);
-        }
-      } catch (error) {
-        console.error("Error parsing JSON: ", error);
-        console.error("Received data: ", event.data);
-      }
-    };
-
     ws.onerror = (error) => {
       console.log("WebSocket Error: ", error);
     };

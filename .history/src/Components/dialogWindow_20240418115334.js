@@ -2,7 +2,20 @@ import React, { useState, useEffect } from "react";
 import "./dialogWindow.scss";
 
 const ChatPage = () => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      user: "John",
+      avatar: "https://dummyimage.com/128x128/363536/ffffff&text=J",
+      content: "你好老人家属(自动问候)",
+    },
+    {
+      id: 2,
+      user: "Assistant",
+      avatar: "https://dummyimage.com/128x128/354ea1/ffffff&text=G",
+      content: "你好(自动问候)",
+    },
+  ]);
   const [inputValue, setInputValue] = useState("");
   const [socket, setSocket] = useState(null);
 
@@ -16,44 +29,16 @@ const ChatPage = () => {
     };
 
     ws.onmessage = (event) => {
-      console.log("Received raw data:", event.data);
-      try {
-        if (
-          event.data &&
-          typeof event.data === "string" &&
-          event.data.startsWith("{") &&
-          event.data.endsWith("}")
-        ) {
-          const message = JSON.parse(event.data);
-          setMessages((prevMessages) => [
-            ...prevMessages,
-            {
-              id: prevMessages.length + 1,
-              user: message.userName || "User",
-              avatar:
-                message.avatar ||
-                "https://dummyimage.com/128x128/000000/ffffff&text=U",
-              content: message.message,
-            },
-          ]);
-          console.log("Processed message:", message);
-        } else {
-          // Handle non-JSON data
-          console.log("Received non-JSON data:", event.data);
-          setMessages((prevMessages) => [
-            ...prevMessages,
-            {
-              id: prevMessages.length + 1,
-              user: "Unknown",
-              avatar: "https://dummyimage.com/128x128/000000/ffffff&text=U",
-              content: event.data,
-            },
-          ]);
-        }
-      } catch (error) {
-        console.error("Error parsing JSON: ", error);
-        console.error("Received data: ", event.data);
-      }
+      const message = JSON.parse(event.data);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          id: prevMessages.length + 1,
+          user: "User", // Assuming messages from the user come with a different user tag
+          avatar: "https://dummyimage.com/128x128/000000/ffffff&text=U",
+          content: message.message,
+        },
+      ]);
     };
 
     ws.onerror = (error) => {
@@ -77,15 +62,7 @@ const ChatPage = () => {
         content: inputValue,
       };
       setMessages([...messages, newMessage]);
-      // Send message in a format that matches expected format on user side
-      if (socket) {
-        socket.send(
-          JSON.stringify({
-            targetUserId: "2",
-            message: inputValue,
-          })
-        );
-      }
+      socket.send(JSON.stringify({ targetUserId: "2", message: inputValue }));
       setInputValue("");
     }
   };
