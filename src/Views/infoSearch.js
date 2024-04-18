@@ -12,7 +12,7 @@ const { Search } = Input;
 const SearchBar = ({ onSearch }) => {
     return (
         <Search
-            placeholder="搜索老人姓名、管理员或房间号"
+            placeholder="请输入老人姓名进行搜索🔍"
             onSearch={onSearch}
             className="search-bar"
         />
@@ -36,7 +36,7 @@ const ElderlyList = ({ data }) => {
                         title={
                             <div className="elderly-info">
                                 <span>{item.name}</span>
-                                <span>护理师: {item.manager}</span>
+                                <span>家属姓名: {item.manager}</span>
                             </div>
                         }
                         description={
@@ -60,12 +60,12 @@ const ElderlyInfo = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await request.post('/Resident/pageSelect');  // 直接使用 request.get 获取数据
+                const response = await request.post('/Resident/pageSelect');
                 const transformedData = response.data.map(item => ({
                     id: item.residentId,
                     name: `${item.firstName} ${item.lastName}`,
-                    manager: item.residentMedicalStaffVO.staffName,
-                    phone: item.residentMedicalStaffVO.phone,
+                    manager: item.residentFamilyVO.username,
+                    phone: item.residentFamilyVO.phone,
                     room: item.roomNumber
                 }));
                 setData(transformedData);  // 使用转换后的数据更新状态
