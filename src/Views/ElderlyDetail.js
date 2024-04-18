@@ -1,101 +1,110 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Card, Col, Row, Avatar } from 'antd';
 import ReactECharts from 'echarts-for-react';
+import request from "../util/api";
 import defaultAvatar from '../assets/default-avatar.png';
+import moment from 'moment';  // 引入moment处理日期
 
 const ElderlyDetail = () => {
-  const fullName = "张 三";
-  const avatarUrl = defaultAvatar;
+  const elderlyId = useParams().id;
+  console.log(elderlyId);
+  const [healthData, setHealthData] = useState([]);
+  const [elderlyInfo, setElderlyInfo] = useState({ fullName: "加载中...", avatarUrl: defaultAvatar });
 
-  // 假设的数据生成
-  const generateFakeData = () => {
-    let data = [];
-    for (let i = 0; i < 16; i++) {
-      data.push({
-        day: i,
-        heartRate: 60 + Math.random() * 20,
-        temperature: 36.5 + Math.random() * 1,
-        oxygenLevel: 90 + Math.random() * 10,
-      });
-    }
-    return data;
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // 同时发起两个请求：健康数据和老人基本信息
+        const [tempResponse, healthResponse, infoResponse] = await Promise.all([
+          request.post(`/HealthData/getAvgTemperatureList/${elderlyId}`),
+          request.post(`/HealthData/getAvgHealthDataList/${elderlyId}`),
+          request.post(`Resident/getDetailInfo/${elderlyId}`)  // 假设这是获取详细信息的API
+        ]);
 
-  const healthData = generateFakeData();
+        console.log(tempResponse);
+        console.log(healthResponse);
+        console.log(infoResponse);
 
-  const getLineOption = () => {
-    return {
-      tooltip: {
-        trigger: 'axis'
-      },
-      legend: {
-        data: ['心率', '体温', '血氧']
-      },
-      xAxis: {
-        type: 'category',
-        data: healthData.map(item => `第${item.day}天`)
-      },
-      yAxis: {
-        type: 'value'
-      },
-      series: [
-        {
-          name: '心率',
-          type: 'line',
-          data: healthData.map(item => item.heartRate)
-        },
-        {
-          name: '体温',
-          type: 'line',
-          data: healthData.map(item => item.temperature)
-        },
-        {
-          name: '血氧',
-          type: 'line',
-          data: healthData.map(item => item.oxygenLevel)
-        }
-      ]
+        // 处理健康数据
+        const temperatureData = tempResponse.data;
+        const healthData = healthResponse.data;
+        const combinedData = temperatureData.map(temp => {
+          const health = healthData.find(h => h.time === temp.time) || {};
+          return {
+            time: temp.time,
+            bodyTemperature: temp.bodyTemperature,
+            heartRate: health.heartRate || null,
+            oxygenLevel: health.oxygenLevel || null
+          };
+        });
+
+        setHealthData(combinedData);
+
+        // 处理个人信息
+        const infoData = infoResponse.data;
+        setElderlyInfo({
+          fullName: `${infoData.firstName} ${infoData.lastName}`,
+          gender: infoData.gender,
+          age: moment().diff(moment(infoData.dateOfBirth, "YYYY-MM-DD"), 'years'),  // 计算年龄
+          roomNumber: infoData.roomNumber,
+          medicalHistory: infoData.notes,
+          livingHabits: infoData.habit,
+          familyContact: `${infoData.relationship} - ${infoData.emergencyContactPhone}`,
+          avatarUrl: infoData.avatarUrl || defaultAvatar  // 使用默认头像作为备选
+        });
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     };
-  };
 
-  const getRadarOption = () => {
-    return {
-      radar: {
-        indicator: [
-          { name: '心率', max: 20 },
-          { name: '体温', max: 20 },
-          { name: '血氧', max: 20 }
-        ]
-      },
-      series: [{
-        type: 'radar',
-        data: [{
-          value: [12, 16, 14],
-          name: '报警次数'
-        }]
-      }]
-    };
-  };
+    fetchData();
+  }, [elderlyId]);
+
+  // 图表配置函数
+  const getLineOption = () => ({
+    tooltip: {
+      trigger: 'axis'
+    },
+    legend: {
+      data: ['体温', '心率', '血氧']
+    },
+    xAxis: {
+      type: 'category',
+      data: healthData.map(item => item.time)
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [
+      { name: '体温', type: 'line', data: healthData.map(item => item.bodyTemperature) },
+      { name: '心率', type: 'line', data: healthData.map(item => item.heartRate) },
+      { name: '血氧', type: 'line', data: healthData.map(item => item.oxygenLevel) }
+    ]
+  });
 
   return (
-    <div>
-      <Card title={`基本信息 - ${fullName}`}>
+      <div>
+        <Card title={`基本信息 - ${elderlyInfo.fullName}`} >
           <Row gutter={16}>
-              <Col span={3}>
-                  <Avatar size={64} src={avatarUrl}/>
-              </Col>
-              <Col span={21}>
-                  <p><strong>姓名:</strong> {fullName}</p>
-              </Col>
+            <Col span={3}>
+              <Avatar size={64} src={elderlyInfo.avatarUrl}/>
+            </Col>
+            <Col span={21}>
+              <p><strong>姓名:</strong> {elderlyInfo.fullName}</p>
+              <p><strong>性别:</strong> {elderlyInfo.gender}</p>
+              <p><strong>年龄:</strong> {elderlyInfo.age}</p>
+              <p><strong>房间号:</strong> {elderlyInfo.roomNumber}</p>
+              <p><strong>病史:</strong> {elderlyInfo.medicalHistory}</p>
+              <p><strong>食宿习惯:</strong> {elderlyInfo.livingHabits}</p>
+              <p><strong>家属联系方式:</strong> {elderlyInfo.familyContact}</p>
+            </Col>
           </Row>
-      </Card>
-      <Card title={'老人各指标统计图'}>
+        </Card>
+        <Card title={'老人各指标统计图'}>
           <ReactECharts option={getLineOption()} style={{ height: 400 }}/>
-      </Card>
-      <Card title={'老人报警信息统计'}>
-          <ReactECharts option={getRadarOption()} style={{ height: 400 }}/>
-      </Card>
-    </div>
+        </Card>
+      </div>
   );
 }
 
