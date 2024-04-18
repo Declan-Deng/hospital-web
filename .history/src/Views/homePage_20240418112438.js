@@ -47,7 +47,7 @@ const HomePage = () => {
 
   const currentAlerts = alertData.filter((alert) => alert.isCurrent);
 
-  const countTypes = currentAlerts.reduce((acc, alert) => {
+  const countTypes = alertData.reduce((acc, alert) => {
     const type = alert.exceptionInfo;
     acc[type] = (acc[type] || 0) + 1;
     return acc;
@@ -65,7 +65,7 @@ const HomePage = () => {
           data={{ all: currentAlerts.length, list: countTypes }}
         ></Statistics>
 
-        {alertData
+        {currentAlerts
           .filter((data) => data.isCurrent)
           .map((data, index) => (
             <ElderlyAlertCard

@@ -47,7 +47,7 @@ const HomePage = () => {
 
   const currentAlerts = alertData.filter((alert) => alert.isCurrent);
 
-  const countTypes = currentAlerts.reduce((acc, alert) => {
+  const countTypes = alertData.reduce((acc, alert) => {
     const type = alert.exceptionInfo;
     acc[type] = (acc[type] || 0) + 1;
     return acc;
@@ -62,7 +62,7 @@ const HomePage = () => {
       <p className="titleAlert">实时报警</p>
       <div className={"alert"}>
         <Statistics
-          data={{ all: currentAlerts.length, list: countTypes }}
+          data={{ all: alertData.length, list: countTypes }}
         ></Statistics>
 
         {alertData
